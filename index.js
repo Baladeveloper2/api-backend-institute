@@ -26,7 +26,7 @@ app.use(
       "https://insitute.vercel.app",
       "https://insitute-raminstitute-exams-projects.vercel.app",
       "https://frontend-institute.vercel.app",
-      "https://institute-amber.vercel.app/"
+      "https://institute-amber.vercel.app"
     ],
     credentials: true 
   })
