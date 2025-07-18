@@ -68,7 +68,7 @@ const examSchema = new mongoose.Schema({
 // 🔸 Batch schema
 const batchSchema = new mongoose.Schema({
   studentId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,    
     ref: 'Students'
   },
   batchName: { type: String, required: true },
