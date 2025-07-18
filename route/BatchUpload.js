@@ -218,13 +218,14 @@ router.get("/exams/:batchName", async (req, res) => {
   }
 });
 
+// routes/exams.js or similar
 router.post('/manual-upload', async (req, res) => {
   try {
     const {
-      batchName, // ✅ Add this
+      batchName,
       examCode,
       examName,
-      examDescription, // ✅ Add this if model has it
+      examDescription,
       category,
       year,
       month,
@@ -237,26 +238,40 @@ router.post('/manual-upload', async (req, res) => {
       return res.status(400).json({ error: 'Required fields missing' });
     }
 
-    const exam = new Batch({
-      batchName,         
+    // ✅ Check if batch already exists
+    let batch = await Batch.findOne({ batchName });
+
+    const newExam = {
       examCode,
       examName,
-      examDescription,    
+      examDescription,
       category,
       year,
       month,
       duration,
       questions
-    });
+    };
 
-    await exam.save();
+    if (batch) {
+      // ✅ If batch exists, push the new exam to exams array
+      batch.exams.push(newExam);
+      await batch.save();
+    } else {
+      // ✅ If batch doesn't exist, create a new batch with exam
+      batch = new Batch({
+        batchName,
+        exams: [newExam]
+      });
+      await batch.save();
+    }
 
-    res.status(200).json({ message: 'Exam saved successfully' });
+    res.status(200).json({ message: 'Exam saved successfully', batchId: batch._id });
   } catch (err) {
     console.error('Error saving exam:', err);
     res.status(500).json({ error: 'Server error' });
   }
 });
+
 
 
 export default router;

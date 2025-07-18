@@ -33,7 +33,7 @@ subOptions: {
   // 🔹 New fields
   questionType: {
     type: String,
-    enum: ['mcq', 'assertion-reason', 'match', 'passage', 'statement'],
+    enum: ['mcq', 'assertion-reason','assertion', 'match', 'passage', 'statement'],
     default: 'mcq'
   },
   explanation: { type: String, default: '' },
