@@ -273,6 +273,54 @@ router.post('/manual-upload', async (req, res) => {
 });
 
 
+// ✅ Get all batches
+router.get("/get-batches", async (req, res) => {
+  try {
+    const batches = await Batch.find({}, {
+      batchName: 1,
+      exams: {
+        examCode: 1,
+        examName: 1,
+        duration: 1,
+        category: 1,
+      }
+    });
+
+    res.status(200).json(batches);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch batches' });
+  }
+});
+
+// ✅ Get exams for a batch
+router.get("/exams/:batchName", async (req, res) => {
+  try {
+    const { batchName } = req.params;
+
+    const batch = await Batch.findOne(
+      { batchName },
+      {
+        exams: {
+          examCode: 1,
+          examName: 1,
+          duration: 1,
+          category: 1,
+        },
+        _id: 0,
+      }
+    );
+
+    if (!batch) {
+      return res.status(404).json({ message: "Batch not found" });
+    }
+
+    res.status(200).json(batch.exams);
+  } catch (error) {
+    console.error("Error fetching exams:", error);
+    res.status(500).json({ error: "Failed to fetch exams for batch" });
+  }
+});
+
 
 export default router;
 
